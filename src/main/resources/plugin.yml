@@ -1,0 +1,5 @@
+name: Glue
+version: ${project.version}
+main: me.colejedwards.glue.Glue
+softDepends: ["cmd_list"]
+softdepend: ["cmd_list"]
