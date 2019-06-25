@@ -64,11 +64,9 @@ public final class Glue extends Plugin {
         important = getRedissonClient().getSet("GLUE:important");
         alertPub = getRedissonClient().getTopic("GLUE:alertPubSub");
 
-        alertPub.addListener((channel, msg) -> {
-            for (ProxiedPlayer proxiedPlayer : getProxy().getPlayers()) {
-                proxiedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-            }
-        });
+        alertPub.addListener((channel, msg) -> 
+            getProxy().getPlayers().stream().forEach(player -> player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg)));
+        );
     }
 
     public void setupProxyData() {
