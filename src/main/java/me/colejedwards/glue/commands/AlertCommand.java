@@ -14,12 +14,12 @@ public class AlertCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("idiot wrong usage!");
-        } else {
-            String strings = StringUtils.join(args, ' ', 0, args.length);
-
-            Glue.getInstance().getAlertPub().publish("&8[&4Alert&8] &f" + strings);
+            sender.sendMessage("§cUsage: /alert <message...>");
+            return;
         }
+        String strings = StringUtils.join(args, ' ', 0, args.length);
+        Glue.getInstance().getAlertPub().publish("&8[&4Alert&8] &f" + strings);
+        
     }
 
 }
