@@ -14,10 +14,10 @@ public class MaintenanceCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         if ((boolean)Glue.getInstance().getProxyData().get("maintenance")) {
             Glue.getInstance().getProxyData().put("maintenance", false);
-            sender.sendMessage("toggled off.");
+            sender.sendMessage("§cToggled maintenance mode off.");
         } else {
             Glue.getInstance().getProxyData().put("maintenance", true);
-            sender.sendMessage("toggled on.");
+            sender.sendMessage("§aToggled maintenance mode on.");
         }
     }
 }
