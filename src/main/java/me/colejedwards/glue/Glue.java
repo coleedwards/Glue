@@ -45,11 +45,9 @@ public final class Glue extends Plugin {
             new GListCommand(),
             new AlertCommand(),
             new MaintenanceCommand()
-        ).forEach(listener -> getProxy().getPluginManager().registerListener(this, listener);
+        ).forEach(cmd -> getProxy().getPluginManager().registerCommand(this, cmd);
         getProxy().getPluginManager().registerListener(this, new GlueListener());
-        getProxy().getPluginManager().registerCommand(this, new GListCommand());
-        getProxy().getPluginManager().registerCommand(this, new AlertCommand());
-        getProxy().getPluginManager().registerCommand(this, new MaintenanceCommand());
+
     }
 
     public void setupRedis() {
