@@ -22,11 +22,7 @@ public class GlueServer {
 
     public List<GlueProfile> getOnline() {
         List<GlueProfile> glueProfiles = new ArrayList<>();
-        for (GlueProfile glueProfile : Glue.getInstance().getProfiles()) {
-            if (glueProfile.getServer().equalsIgnoreCase(name)) {
-                glueProfiles.add(glueProfile);
-            }
-        }
+        Glue.getInstance().getProfiles().stream().filter(profile -> profile.getName().equalsIgnoreCase(name)).forEach(glueProfiles::add);
         return glueProfiles;
     }
 }

@@ -16,23 +16,20 @@ import org.redisson.api.RSet;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 
+import java.util.Arrays; // might be wrong import, not sure, using git cuz don't wanna d0wnl04d
+
 import java.util.UUID;
 
 @Getter
 public final class Glue extends Plugin {
 
     @Getter private static Glue instance;
-
     private RedissonClient redissonClient;
-
     private Config config;
-
+    
     private RSet<GlueProfile> profiles;
-
     private RSet<UUID> important;
-
     private RMap<String, Object> proxyData;
-
     private RTopic<String> alertPub;
 
     @Override
@@ -44,10 +41,13 @@ public final class Glue extends Plugin {
         setupRedis();
         setupProxyData();
 
+        Arrays.asList(
+            new GListCommand(),
+            new AlertCommand(),
+            new MaintenanceCommand()
+        ).forEach(cmd -> getProxy().getPluginManager().registerCommand(this, cmd);
         getProxy().getPluginManager().registerListener(this, new GlueListener());
-        getProxy().getPluginManager().registerCommand(this, new GListCommand());
-        getProxy().getPluginManager().registerCommand(this, new AlertCommand());
-        getProxy().getPluginManager().registerCommand(this, new MaintenanceCommand());
+
     }
 
     public void setupRedis() {
@@ -64,11 +64,9 @@ public final class Glue extends Plugin {
         important = getRedissonClient().getSet("GLUE:important");
         alertPub = getRedissonClient().getTopic("GLUE:alertPubSub");
 
-        alertPub.addListener((channel, msg) -> {
-            for (ProxiedPlayer proxiedPlayer : getProxy().getPlayers()) {
-                proxiedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-            }
-        });
+        alertPub.addListener((channel, msg) -> 
+            getProxy().getPlayers().stream().forEach(player -> player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg)));
+        );
     }
 
     public void setupProxyData() {

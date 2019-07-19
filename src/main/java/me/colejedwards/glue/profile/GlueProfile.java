@@ -27,11 +27,6 @@ public class GlueProfile {
     }
 
     public static GlueProfile getGlueProfileFromUUID(UUID uuid) {
-        for (GlueProfile glueProfile : Glue.getInstance().getProfiles()) {
-            if (glueProfile.getUuid().equals(uuid)) {
-                return glueProfile;
-            }
-        }
-        return null;
+        return Glue.getInstance().getProfiles().stream().filter(profile -> profile.getUuid().equals(uuid)).findFirst().orElse(null);
     }
 }

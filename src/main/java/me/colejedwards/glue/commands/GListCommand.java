@@ -1,6 +1,6 @@
 package me.colejedwards.glue.commands;
 
-import com.google.common.base.Joiner;
+import java.util.stream.Collectors;
 import me.colejedwards.glue.Glue;
 import me.colejedwards.glue.server.GlueServer;
 import net.md_5.bungee.api.CommandSender;
@@ -23,15 +23,11 @@ public class GListCommand extends Command {
                sender.sendMessage("§cThere are currently " + Glue.getInstance().getProfiles().size() + " players on the network.");
                sender.sendMessage("§4To see all players, do /glist showall!");
            } else {
-               for (ServerInfo serverInfo : Glue.getInstance().getProxy().getServers().values()) {
-                   GlueServer glueServer = new GlueServer(serverInfo.getName());
-
-                   Set<String> usernames = new HashSet<>();
-
-                   glueServer.getOnline().forEach(profile -> usernames.add(profile.getUsername()));
-
-                   sender.sendMessage("§a[" + serverInfo.getName() + "] &e" + glueServer.getOnline().size() + "&f: " + Joiner.on(',').join(usernames));
-               }
+               Glue.getInstance().getProxy().getServers().values().forEach(serverInfo -> {
+                    GlueServer glueServer = new GlueServer(serverInfo.getName());
+                    String usernames = glueServer.getOnline().stream().map(GlueProfile::getUsername).collect(Collectors.joining("&f, ");
+                    sender.sendMessage("§a[" + serverInfo.getName() + "] &e" + glueServer.getOnline().size() + "&f: " + usernames);
+               });
                sender.sendMessage("§fTotal players online: " + Glue.getInstance().getProfiles().size());
            }
         });
